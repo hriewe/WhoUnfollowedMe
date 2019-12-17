@@ -1,2 +1,2 @@
-# WhoUnfollowedMe
-Programmatically determining users who unfollow your Instagram account 
+# Who Unfollowed Me?
+Programmatically determining users who unfollow your Instagram account.
