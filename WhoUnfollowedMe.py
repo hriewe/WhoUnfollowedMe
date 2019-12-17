@@ -5,6 +5,7 @@
 
 from InstagramAPI import InstagramAPI
 from flask import Flask
+from flask.templating import render_template
 
 app = Flask(__name__)
 
@@ -27,9 +28,9 @@ def getTotalFollowers(api, user_id):
         next_max_id = api.LastJson.get('next_max_id', '')
     return followers
 
-
-if __name__ == "__main__":
-    api = InstagramAPI("hayden.py", "iJQfx8BCDK^ZFzxTRSb5M^MkNqYUgr")
+@app.route('/')
+def WhoUnfollowed():
+    api = InstagramAPI("username", "password")
     api.login()
 
     # user_id = '1461295173'.
@@ -48,22 +49,27 @@ if __name__ == "__main__":
     
     # Add all folowers from previous run to previous set.
     try:
-      with open('followers.txt', 'r') as f:
+      with open('db/followers.txt', 'r') as f:
         next(f)
         for follower in f:
           previous.add(follower.strip('\n'))
     except IOError:
       print("Previous followers could not be loaded. If this is your first run, this is normal")
 
-    # Determine difference of sets. This will reveal who has unfollowed.
-    unfollowed = previous.difference(current)
-    if len(unfollowed) == 0:
-      print("No one has unfollowed you since last run.")
-    else:
-      print("People who unfollowed you: " + str(unfollowed))
-
-    # Overwrite the previous followers with the most recent ones for next time.
-    with open('followers.txt', 'w') as f:
+    # Overwrite the previous followers with the most recent ones for next run.
+    with open('db/followers.txt', 'w') as f:
       f.write('Number of followers: ' + str(len(followers)) + '\n')
       for follower in followers:
         f.write(follower['username'] + '\n')
+
+    # Determine difference of sets. This will reveal who has unfollowed.
+    unfollowed = previous.difference(current)
+    if len(unfollowed) == 0:
+      return render_template('noresult.html')
+    else:
+      return render_template('result.html', result = unfollowed)
+    
+    return render_template('result.html', result = unfollowed)
+
+if __name__ == "__main__":
+  app.run()

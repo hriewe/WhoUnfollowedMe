@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Who Unfollowed Me?</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  </head>
+  <body>
+    <img class="logo" src='../static/img/logo.png'>
+    <div class="content">
+      <br>
+      <br>
+      <table>
+        <tr>
+          <th>User</th>
+          <th>Profile</th>
+         </tr>
+        {% for user in result %}
+           <tr>
+            <td>{{ user }}</td>
+            <td><a href="https://instagram.com/">{{ user }}'s profile</a></td>
+           </tr>
+        {% endfor %}
+     </table>
+    </div>
+    <div class="footer">
+      <p>View source on <a href="https://github.com/hriewe/WhoUnfollowedMe">github</a></p>
+    </div>
+  </body>
+</html>
