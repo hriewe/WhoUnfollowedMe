@@ -64,6 +64,13 @@ def WhoUnfollowed():
 
     # Determine difference of sets. This will reveal who has unfollowed.
     unfollowed = previous.difference(current)
+
+    # Save to history
+    with open('history/history.txt', 'a') as history:
+      for username in unfollowed:
+        history.write(username + '\n')
+    
+    # Display html
     if len(unfollowed) == 0:
       return render_template('noresult.html')
     else:
